@@ -1,0 +1,8 @@
+name = baidu push services
+description = build services endpoint with baidu push
+package = Services
+core = 7.x
+
+dependencies[] = services
+version = "7.x-1.0"
+core = "7.x"

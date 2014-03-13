@@ -1,0 +1,51 @@
+<?php
+/**
+ * Implementation of hook_services_resources().
+ */
+function baidu_push_services_services_resources() {
+  $resources = array();
+
+  $resources['message']['actions']['send'] = [
+    'file' => array(
+      'type' => 'inc',
+      'module' => 'baidu_push_services',
+      'name' => 'baidu_push_services',
+    ),
+    'access callback' => '_message_access',
+    'callback' => 'baidu_push_services_send',
+    'args' => array(
+      array(
+        'name' => 'uid',
+        'type' => 'int',
+        'source' => 'data',
+        'optional' => FALSE,
+      ),
+      array(
+        'name' => 'message',
+        'type' => 'string',
+        'source' => 'data',
+        'optional' => FALSE,
+      ),
+      array(
+        'name' => 'message_type',
+        'type' => 'int',
+        'source' => 'data',
+        'optional' => FALSE,
+      ),
+    ),
+  ];
+
+  return $resources;
+}
+
+function _message_access() {
+  global $user;
+
+  if(in_array('authenticated user', $user->roles)) {
+    return TRUE;
+  }else {
+    services_error(t('Access denied for user anonymous'), 406);
+  }
+
+}
+
